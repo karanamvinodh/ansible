@@ -85,3 +85,133 @@ ansible-target1 | SUCCESS => {
 }
 
 
+create a playbook named playbook-pingtest.yaml
+
+-
+ name: Test the connectivity of target servers
+ hosts: all
+ tasks:
+  - name: Ping Test
+    ping:
+
+
+running the playbook named playbook-pingtest.yaml
+
+ansible-playbook playbook-pingtest.yaml -i inventory.txt
+
+output:
+PLAY [Test the connectivity of target servers] *********************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ansible-target1]
+ok: [ansible-target2]
+
+TASK [Ping Test] ***************************************************************
+ok: [ansible-target1]
+ok: [ansible-target2]
+
+PLAY RECAP *********************************************************************
+ansible-target1            : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+ansible-target2            : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+create a playbook named playbook-copyfile.yaml
+
+-
+ name: Copy file to target servers
+ hosts: all
+ tasks:
+  - name: Copy File
+    copy:
+     src: /tmp/test-file.txt
+     dest: /tmp/test-file.txt
+
+
+
+running the playbook named playbook-copyfile.yaml
+
+ansible-playbook playbook-copyfile.yaml -i inventory.txt
+
+output:
+PLAY [Copy file to target servers] *********************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ansible-target1]
+ok: [ansible-target2]
+
+TASK [Copy File] ***************************************************************
+changed: [ansible-target2]
+changed: [ansible-target1]
+
+PLAY RECAP *********************************************************************
+ansible-target1            : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+ansible-target2            : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+
+running the playbook named playbook-copyfile again
+
+ansible-playbook playbook-copyfile.yaml-i inventory.txt
+
+output:
+PLAY [Copy file to target servers] *********************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ansible-target1]
+ok: [ansible-target2]
+
+TASK [Copy File] ***************************************************************
+ok: [ansible-target2]
+ok: [ansible-target1]
+
+PLAY RECAP *********************************************************************
+ansible-target1            : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+ansible-target2            : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+
+create a playbook named playbook-test1.yaml
+
+-
+ name: play1
+ hosts: all
+ tasks:
+  - name: Execute Command 'date'
+    command: date
+
+  - name: Display resolv.conf contents
+    command: cat /etc/resolv.conf
+
+  - name: Display resolv.conf contents
+    command: cat resolv.conf chdir=/etc
+
+
+
+running the playbook named playbook-test1.yaml
+
+ansible-playbook playbook-test1.yaml -i inventory.txt
+
+output:
+PLAY [play1] *******************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ansible-target1]
+ok: [ansible-target2]
+
+TASK [Execute Command 'date'] **************************************************
+changed: [ansible-target1]
+changed: [ansible-target2]
+
+TASK [Display resolv.conf contents] ********************************************
+changed: [ansible-target1]
+changed: [ansible-target2]
+
+TASK [Display resolv.conf contents] ********************************************
+changed: [ansible-target1]
+changed: [ansible-target2]
+
+PLAY RECAP *********************************************************************
+ansible-target1            : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+ansible-target2            : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
