@@ -1,0 +1,87 @@
+portal.azure.com
+
+created 3 virtual machines named
+a. ansible-controller
+b. ansible-target1
+c. ansible-target2
+
+having username=azureuser and password=azureuser@123
+
+connect to ansible-controller using ssh and install ansible in the vm.
+also insall sshpass, if required.
+
+check the accessibility of ansible-target1 and ansible-target2 from ansible-controller.
+
+create a new folder
+mkdir test-project
+
+change the directory
+cd test-project
+
+create an inventory.txt file
+
+cat > inventory.txt
+ansible-target1 ansible_host=<publicip> ansible_ssh_password=azureuser@123 ansible_user=azureuser
+ansible-target2 ansible_host=<publicip> ansible_ssh_password=azureuser@123 ansible_user=azureuser
+
+
+cat inventory.txt to view the contents
+
+to test the working of ansible
+ansible --version
+
+output looks like:
+ansible [core 2.11.12]
+  config file = None
+  configured module search path = ['/root/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/local/lib/python3.6/site-packages/ansible
+  ansible collection location = /root/.ansible/collections:/usr/share/ansible/collections
+  executable location = /usr/local/bin/ansible
+  python version = 3.6.8 (default, Aug  3 2021, 06:54:29) [GCC 8.3.1 20191121 (Red Hat 8.3.1-5)]
+  jinja version = 2.10.1
+  libyaml = True
+
+
+ansible ansible-target1 -m ping -i inventory.txt
+
+output:
+ansible-target1 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/libexec/platform-python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+
+ansible ansible-target2 -m ping -i inventory.txt
+
+output:
+ansible-target2 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/libexec/platform-python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+
+ansible all -m ping -i inventory.txt
+
+output:
+ansible-target2 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/libexec/platform-python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+ansible-target1 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/libexec/platform-python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+
