@@ -1,0 +1,12 @@
+-
+ name: play1
+ hosts: all
+ tasks:
+  - name: Execute Command 'date'
+    command: date
+
+  - name: Display resolv.conf contents
+    command: cat /etc/resolv.conf
+
+  - name: Display resolv.conf contents
+    command: cat resolv.conf chdir=/etc

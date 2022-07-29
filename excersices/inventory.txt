@@ -1,0 +1,2 @@
+ansible-target1 ansible_host=<publicip> ansible_ssh_password=azureuser@123 ansible_user=azureuser
+ansible-target2 ansible_host=<publicip> ansible_ssh_password=azureuser@123 ansible_user=azureuser
