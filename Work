@@ -291,3 +291,93 @@ ansible-target1            : ok=2    changed=1    unreachable=0    failed=0    s
 ansible-target2            : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 
+create a playbook name playbook-testvars.yaml
+
+-
+ name: variables playbook test
+ hosts: localhost
+
+ vars:
+  var_one: awsome
+  var_two: ansible is
+  var_three: "{{var_two}} {{var_one}}"
+
+ tasks:
+  - name: print out var_three
+    debug:
+     msg: "{{var_three}}"
+     
+     
+running playbook named playbook-testvars.yaml
+
+ansible-playbook playbook-testvars.yaml -i inventory.txt
+
+output:
+PLAY [variables playbook test] **************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [print out var_three] ******************************************************************************************************************************************************************
+ok: [localhost] => {
+    "msg": "ansible is awsome"
+}
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+localhost                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+
+create a playbook named playbook-nginx.yaml
+
+-
+ name: Patching, Installing nginx server and starting the service
+ hosts: ansible-target2
+ become: yes
+ become_user: root
+ tasks:
+  - name: Install epel-release
+    shell: yum install epel-release -y
+
+  - name: Patch Server
+    shell: yum -y update
+
+  - name: Install nginx
+    yum:
+     name: nginx
+     state: latest
+
+  - name: Start the service
+    service:
+     name: nginx
+     state: started
+     
+     
+     
+running playbook named playbook-nginx.yaml
+
+ansible-playbook playbook-nginx.yaml -i inventory.txt
+
+output:
+PLAY [Patching, Installing nginx server and starting the service] ***************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+ok: [ansible-target2]
+
+TASK [Install epel-release] *****************************************************************************************************************************************************************
+[WARNING]: Consider using the yum module rather than running 'yum'.  If you need to use command because yum is insufficient you can add 'warn: false' to this command task or set
+'command_warnings=False' in ansible.cfg to get rid of this message.
+changed: [ansible-target2]
+
+TASK [Patch Server] *************************************************************************************************************************************************************************
+changed: [ansible-target2]
+
+TASK [Install nginx] ************************************************************************************************************************************************************************
+changed: [ansible-target2]
+
+TASK [Start the service] ********************************************************************************************************************************************************************
+changed: [ansible-target2]
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+ansible-target2            : ok=5    changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
