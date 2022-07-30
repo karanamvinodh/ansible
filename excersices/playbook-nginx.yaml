@@ -1,0 +1,21 @@
+-
+ name: Patching, Installing nginx server and starting the service
+ hosts: ansible-target2
+ become: yes
+ become_user: root
+ tasks:
+  - name: Install epel-release
+    shell: yum install epel-release -y
+
+  - name: Patch Server
+    shell: yum -y update
+
+  - name: Install nginx
+    yum:
+     name: nginx
+     state: latest
+
+  - name: Start the service
+    service:
+     name: nginx
+     state: started
