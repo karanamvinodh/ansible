@@ -215,3 +215,79 @@ ansible-target1            : ok=4    changed=3    unreachable=0    failed=0    s
 ansible-target2            : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 
+create a playbook named playbook-httpd.yaml
+
+-
+ name: Install httpd and start the service
+ hosts: all
+ become: yes
+ become_user: root
+ tasks:
+  - name: Install httpd
+    yum:
+     name: httpd
+     state: latest
+
+  - name: Start httpd service
+    service:
+     name: httpd
+     state: started
+
+running the playbook named playbook-httpd.yaml
+
+ansible-playbook playbook-httpd.yaml
+
+
+output:
+PLAY [Install httpd and start the service] **************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+ok: [ansible-target1]
+ok: [ansible-target2]
+
+TASK [Install httpd] ************************************************************************************************************************************************************************
+changed: [ansible-target1]
+changed: [ansible-target2]
+
+TASK [Start httpd service] ******************************************************************************************************************************************************************
+changed: [ansible-target1]
+changed: [ansible-target2]
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+ansible-target1            : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+ansible-target2            : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+create playbook named playbook-httpdremove.yaml
+
+-
+ name: Removing httpd
+ hosts: all
+ become: true
+ tasks:
+  - name: Remove httpd
+    yum:
+     name: httpd
+     autoremove: yes
+     state: absent
+
+
+running the playbook named playbook-httpdremove.yaml
+
+
+output:
+PLAY [Removing httpd] ***********************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+ok: [ansible-target1]
+ok: [ansible-target2]
+
+TASK [Remove httpd] *************************************************************************************************************************************************************************
+changed: [ansible-target1]
+changed: [ansible-target2]
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+ansible-target1            : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+ansible-target2            : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
